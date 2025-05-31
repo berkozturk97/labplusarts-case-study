@@ -1,0 +1,37 @@
+/* Global CSS Variables - Bu dosya global olarak kullanılacak */
+:root {
+  /* Global Color Palette - Slate Scale */
+  --slate-950: #020617;
+  --slate-900: #0f172a;
+  --slate-800: #1e293b;
+  --slate-700: #334155;
+  --slate-600: #475569;
+  --slate-500: #64748b;
+  --slate-400: #94a3b8;
+  --slate-300: #cbd5e1;
+  --slate-200: #e2e8f0;
+  --slate-100: #f1f5f9;
+  --slate-50: #f8fafc;
+
+  /* Default semantic colors (Light mode as default) */
+  --color-text-primary: var(--slate-900);
+  --color-text-secondary: var(--slate-600);
+  --color-text-muted: var(--slate-500);
+  --color-background-primary: var(--slate-50);
+  --color-background-secondary: var(--slate-100);
+  --color-border: var(--slate-200);
+  --color-border-hover: var(--slate-300);
+}
+
+/* Dark mode overrides */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-text-primary: var(--slate-100);
+    --color-text-secondary: var(--slate-300);
+    --color-text-muted: var(--slate-400);
+    --color-background-primary: var(--slate-900);
+    --color-background-secondary: var(--slate-800);
+    --color-border: var(--slate-700);
+    --color-border-hover: var(--slate-600);
+  }
+}
