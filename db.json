@@ -1,0 +1,102 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "John Doe",
+      "email": "john@example.com",
+      "role": "Admin",
+      "createdAt": "2024-03-15",
+      "isActive": true
+    },
+    {
+      "id": 2,
+      "name": "Jane Smith",
+      "email": "jane@example.com",
+      "role": "User",
+      "createdAt": "2024-02-20",
+      "isActive": false
+    },
+    {
+      "id": 3,
+      "name": "Mike Johnson",
+      "email": "mike@example.com",
+      "role": "Manager",
+      "createdAt": "2024-01-10",
+      "isActive": true
+    },
+    {
+      "id": 4,
+      "name": "Alice Johnson",
+      "email": "alice@example.com",
+      "role": "User",
+      "createdAt": "2024-03-12",
+      "isActive": true
+    },
+    {
+      "id": 5,
+      "name": "Bob Wilson",
+      "email": "bob@example.com",
+      "role": "Manager",
+      "createdAt": "2024-01-25",
+      "isActive": true
+    },
+    {
+      "id": 6,
+      "name": "Carol Davis",
+      "email": "carol@example.com",
+      "role": "User",
+      "createdAt": "2024-02-14",
+      "isActive": false
+    }
+  ],
+  "orders": [
+    {
+      "id": 1,
+      "orderNumber": "ORD-001",
+      "customer": "Alice Johnson",
+      "status": "Shipped",
+      "orderDate": "2024-03-10",
+      "total": 299.99
+    },
+    {
+      "id": 2,
+      "orderNumber": "ORD-002",
+      "customer": "Bob Wilson",
+      "status": "Pending",
+      "orderDate": "2024-03-18",
+      "total": 159.5
+    },
+    {
+      "id": 3,
+      "orderNumber": "ORD-003",
+      "customer": "Carol Davis",
+      "status": "Delivered",
+      "orderDate": "2024-02-28",
+      "total": 89.75
+    },
+    {
+      "id": 4,
+      "orderNumber": "ORD-004",
+      "customer": "John Doe",
+      "status": "Processing",
+      "orderDate": "2024-03-20",
+      "total": 450.0
+    },
+    {
+      "id": 5,
+      "orderNumber": "ORD-005",
+      "customer": "Jane Smith",
+      "status": "Cancelled",
+      "orderDate": "2024-03-15",
+      "total": 125.25
+    },
+    {
+      "id": 6,
+      "orderNumber": "ORD-006",
+      "customer": "Mike Johnson",
+      "status": "Delivered",
+      "orderDate": "2024-03-08",
+      "total": 678.9
+    }
+  ]
+}
