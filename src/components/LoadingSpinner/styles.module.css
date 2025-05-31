@@ -1,0 +1,104 @@
+/* LoadingSpinner Styles */
+.container {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.fullScreen {
+  background: var(--color-background-primary);
+  height: 100vh;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 9999;
+}
+
+.spinner {
+  display: flex;
+  gap: 0.3rem;
+  justify-content: center;
+}
+
+.spinner > div {
+  animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+  background-color: var(--slate-600);
+  border-radius: 100%;
+}
+
+/* Size variants */
+.small > div {
+  height: 8px;
+  width: 8px;
+}
+
+.medium > div {
+  height: 12px;
+  width: 12px;
+}
+
+.large > div {
+  height: 16px;
+  width: 16px;
+}
+
+/* Animation delays */
+.bounce1 {
+  animation-delay: -0.32s !important;
+}
+
+.bounce2 {
+  animation-delay: -0.16s !important;
+}
+
+.bounce3 {
+  animation-delay: 0s !important;
+}
+
+.text {
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin: 0;
+  text-align: center;
+}
+
+/* Keyframe animations */
+@keyframes sk-bouncedelay {
+  0%,
+  80%,
+  100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1);
+  }
+}
+
+/* Dark mode spinner color */
+@media (prefers-color-scheme: dark) {
+  .spinner > div {
+    background-color: var(--slate-400);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .spinner > div {
+    animation: none;
+    background-color: var(--slate-600);
+    opacity: 0.6;
+  }
+
+  .spinner > div:nth-child(2) {
+    opacity: 0.8;
+  }
+
+  .spinner > div:nth-child(3) {
+    opacity: 1;
+  }
+}

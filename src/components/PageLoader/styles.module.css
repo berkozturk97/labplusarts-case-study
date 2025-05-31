@@ -1,0 +1,15 @@
+/* PageLoader Styles */
+.pageLoader {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  min-height: 400px;
+  width: 100%;
+}
+
+/* For smaller screens */
+@media (max-width: 768px) {
+  .pageLoader {
+    min-height: 300px;
+  }
+}

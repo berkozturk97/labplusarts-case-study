@@ -1,0 +1,102 @@
+.header {
+  backdrop-filter: blur(10px);
+  background: var(--color-background-primary);
+  border-bottom: 1px solid var(--color-border);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 1rem 0;
+  position: sticky;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.container {
+  align-items: center;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  margin: 0 auto;
+  max-width: 1200px;
+  padding: 0 2rem;
+  width: 100%;
+}
+
+.navigation {
+  align-items: center;
+  display: flex;
+  flex: 1;
+  gap: 2rem;
+  justify-content: center;
+}
+
+.navLink {
+  align-items: center;
+  border-radius: 8px;
+  color: var(--color-text-secondary);
+  display: flex;
+  font-weight: 500;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  position: relative;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.navLink:hover {
+  background: var(--color-background-secondary);
+  color: var(--color-text-primary);
+}
+
+.navLinkActive {
+  background: var(--slate-100);
+  color: var(--slate-600);
+  font-weight: 600;
+}
+
+.navIcon {
+  font-size: 1.1rem;
+}
+
+.userSection {
+  flex-shrink: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 1rem;
+  }
+
+  .navigation {
+    gap: 1rem;
+    justify-content: flex-start;
+  }
+
+  .navLink {
+    font-size: 0.875rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .navLink span:last-child {
+    display: none;
+  }
+
+  .profileName {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 0.75rem;
+  }
+
+  .navigation {
+    gap: 0.5rem;
+  }
+
+  .navLink {
+    padding: 0.5rem;
+  }
+}
