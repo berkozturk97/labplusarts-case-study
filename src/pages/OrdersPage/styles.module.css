@@ -3,3 +3,159 @@
   max-width: 1200px;
   padding: 2rem;
 }
+
+/* Header Section */
+.header {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.title {
+  color: var(--color-text-primary);
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  color: var(--color-text-secondary);
+  font-size: 1rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Error States */
+.error {
+  background: var(--color-background-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  margin: 2rem auto;
+  max-width: 400px;
+  padding: 2rem;
+  text-align: center;
+}
+
+.error h2 {
+  color: var(--color-text-primary);
+  margin-bottom: 1rem;
+}
+
+.error p {
+  color: var(--color-text-secondary);
+  margin-bottom: 1.5rem;
+}
+
+.error button {
+  background: var(--slate-600);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.75rem 1.5rem;
+  transition: background-color 0.2s ease;
+}
+
+.error button:hover {
+  background: var(--slate-700);
+}
+
+/* Footer Section */
+.footer {
+  margin-top: 2rem;
+}
+
+.stats {
+  background: var(--color-background-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.statItem {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 120px;
+}
+
+.statLabel {
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-align: center;
+}
+
+.statValue {
+  color: var(--color-text-primary);
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .header {
+    margin-bottom: 1.5rem;
+    text-align: left;
+  }
+
+  .footer {
+    margin-top: 1.5rem;
+  }
+
+  .stats {
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem;
+  }
+
+  .statItem {
+    align-items: flex-start;
+    flex-direction: row;
+    justify-content: space-between;
+    min-width: auto;
+    width: 100%;
+  }
+
+  .statLabel {
+    text-align: left;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0.75rem;
+  }
+
+  .error {
+    margin: 1rem auto;
+    padding: 1.5rem;
+  }
+
+  .stats {
+    padding: 0.75rem;
+  }
+
+  .statItem {
+    gap: 0.5rem;
+  }
+
+  .statLabel {
+    font-size: 0.8rem;
+  }
+
+  .statValue {
+    font-size: 1.125rem;
+  }
+}

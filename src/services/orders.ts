@@ -1,8 +1,30 @@
-import { API_URLS } from "../constants/api";
 import { api } from "./api";
+import type { Order } from "../types/api";
+import { API_URLS } from "../constants/api";
+
+// Response type for dynamic columns
+export interface OrdersWithColumns {
+  data: Order[];
+  tableColumnNames: string[];
+}
 
 export const ordersApi = api.injectEndpoints({
   endpoints: build => ({
+    filterOrders: build.query<OrdersWithColumns, void>({
+      query: () => ({
+        url: API_URLS.ORDERS,
+      }),
+      transformResponse: (response: Order[]) => {
+        // Extract column names from the first object if data exists
+        const tableColumnNames = response.length > 0 ? Object.keys(response[0]) : [];
+
+        return {
+          data: response,
+          tableColumnNames,
+        };
+      },
+      providesTags: ["Orders"],
+    }),
     getAllOrders: build.query({
       query: () => ({
         url: API_URLS.ORDERS,
@@ -11,7 +33,7 @@ export const ordersApi = api.injectEndpoints({
     }),
     createOrder: build.mutation({
       query: orderData => ({
-        url: API_URLS.ORDERS,
+        url: "/orders",
         method: "POST",
         body: orderData,
       }),
@@ -20,4 +42,4 @@ export const ordersApi = api.injectEndpoints({
   }),
 });
 
-export const { useGetAllOrdersQuery, useCreateOrderMutation } = ordersApi;
+export const { useGetAllOrdersQuery, useFilterOrdersQuery, useCreateOrderMutation } = ordersApi;
