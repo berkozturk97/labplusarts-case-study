@@ -1,7 +1,7 @@
 {
   "users": [
     {
-      "id": 1,
+      "id": "1",
       "name": "John Doe",
       "email": "john@example.com",
       "role": "Admin",
@@ -10,7 +10,7 @@
       "canBeFilteredPropsWithDropdown": ["role", "isActive"]
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "Jane Smith",
       "email": "jane@example.com",
       "role": "User",
@@ -19,7 +19,7 @@
       "canBeFilteredPropsWithDropdown": ["role", "isActive"]
     },
     {
-      "id": 3,
+      "id": "3",
       "name": "Mike Johnson",
       "email": "mike@example.com",
       "role": "Manager",
@@ -28,7 +28,7 @@
       "canBeFilteredPropsWithDropdown": ["role", "isActive"]
     },
     {
-      "id": 4,
+      "id": "4",
       "name": "Alice Johnson",
       "email": "alice@example.com",
       "role": "User",
@@ -37,7 +37,7 @@
       "canBeFilteredPropsWithDropdown": ["role", "isActive"]
     },
     {
-      "id": 5,
+      "id": "5",
       "name": "Bob Wilson",
       "email": "bob@example.com",
       "role": "Manager",
@@ -46,7 +46,7 @@
       "canBeFilteredPropsWithDropdown": ["role", "isActive"]
     },
     {
-      "id": 6,
+      "id": "6",
       "name": "Carol Davis",
       "email": "carol@example.com",
       "role": "User",
@@ -55,7 +55,7 @@
       "canBeFilteredPropsWithDropdown": ["role", "isActive"]
     },
     {
-      "id": 7,
+      "id": "7",
       "name": "Berk Ozturk",
       "email": "berk@example.com",
       "role": "Admin",
@@ -64,7 +64,7 @@
       "canBeFilteredPropsWithDropdown": ["role", "isActive"]
     },
     {
-      "id": 8,
+      "id": "8",
       "name": "Berkecan Ozturko",
       "email": "berkecan@example.com",
       "role": "User",
@@ -73,7 +73,7 @@
       "canBeFilteredPropsWithDropdown": ["role", "isActive"]
     },
     {
-      "id": 9,
+      "id": "9",
       "name": "Ahmet Ceylan",
       "email": "ahmet@example.com",
       "role": "User",
@@ -82,7 +82,7 @@
       "canBeFilteredPropsWithDropdown": ["role", "isActive"]
     },
     {
-      "id": 10,
+      "id": "10",
       "name": "Mehmet Ceylan",
       "email": "mehmet@example.com",
       "role": "Admin",
@@ -91,7 +91,7 @@
       "canBeFilteredPropsWithDropdown": ["role", "isActive"]
     },
     {
-      "id": 11,
+      "id": "11",
       "name": "Robert Ceylan",
       "email": "robert@example.com",
       "role": "Admin",
@@ -100,7 +100,7 @@
       "canBeFilteredPropsWithDropdown": ["role", "isActive"]
     },
     {
-      "id": 12,
+      "id": "12",
       "name": "Cemalettin Karakaya",
       "email": "cemalettin@example.com",
       "role": "User",
@@ -111,7 +111,7 @@
   ],
   "orders": [
     {
-      "id": 1,
+      "id": "1",
       "orderNumber": "ORD-001",
       "customer": "Alice Johnson",
       "status": "Shipped",
@@ -120,7 +120,7 @@
       "canBeFilteredPropsWithDropdown": ["customer", "status"]
     },
     {
-      "id": 2,
+      "id": "2",
       "orderNumber": "ORD-002",
       "customer": "Bob Wilson",
       "status": "Pending",
@@ -129,7 +129,7 @@
       "canBeFilteredPropsWithDropdown": ["customer", "status"]
     },
     {
-      "id": 3,
+      "id": "3",
       "orderNumber": "ORD-003",
       "customer": "Carol Davis",
       "status": "Delivered",
@@ -138,16 +138,16 @@
       "canBeFilteredPropsWithDropdown": ["customer", "status"]
     },
     {
-      "id": 4,
+      "id": "4",
       "orderNumber": "ORD-004",
       "customer": "John Doe",
       "status": "Processing",
       "orderDate": "2025-03-20",
-      "total": 450.0,
+      "total": 450,
       "canBeFilteredPropsWithDropdown": ["customer", "status"]
     },
     {
-      "id": 5,
+      "id": "5",
       "orderNumber": "ORD-005",
       "customer": "Jane Smith",
       "status": "Cancelled",
@@ -156,7 +156,7 @@
       "canBeFilteredPropsWithDropdown": ["customer", "status"]
     },
     {
-      "id": 6,
+      "id": "6",
       "orderNumber": "ORD-006",
       "customer": "Mike Johnson",
       "status": "Delivered",
@@ -165,7 +165,7 @@
       "canBeFilteredPropsWithDropdown": ["customer", "status"]
     },
     {
-      "id": 7,
+      "id": "7",
       "orderNumber": "ORD-007",
       "customer": "John Doeer",
       "status": "Cancelled",
@@ -174,7 +174,7 @@
       "canBeFilteredPropsWithDropdown": ["customer", "status"]
     },
     {
-      "id": 8,
+      "id": "8",
       "orderNumber": "ORD-008",
       "customer": "John Doe",
       "status": "Cancelled",
@@ -183,7 +183,7 @@
       "canBeFilteredPropsWithDropdown": ["customer", "status"]
     },
     {
-      "id": 9,
+      "id": "9",
       "orderNumber": "ORD-009",
       "customer": "John Doe",
       "status": "Cancelled",
@@ -192,7 +192,7 @@
       "canBeFilteredPropsWithDropdown": ["customer", "status"]
     },
     {
-      "id": 10,
+      "id": "10",
       "orderNumber": "ORD-010",
       "customer": "John Doe",
       "status": "Cancelled",
@@ -201,7 +201,7 @@
       "canBeFilteredPropsWithDropdown": ["customer", "status"]
     },
     {
-      "id": 11,
+      "id": "11",
       "orderNumber": "ORD-011",
       "customer": "John Doe",
       "status": "Cancelled",

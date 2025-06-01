@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import styles from "./styles.module.css";
 import { useFilterUsersQuery } from "../../services/users";
 import DataTable from "../../components/DataTable";
@@ -6,6 +6,7 @@ import LoadingSpinner from "../../components/LoadingSpinner";
 import DateRangeFilterComponent from "../../components/DateRangeFilter";
 import ExactDateFilterComponent from "../../components/ExactDateFilter";
 import MultiSelectFilterComponent from "../../components/MultiSelectFilter";
+import CreateUserModal from "../../components/CreateUserModal";
 import { usePageParams } from "../../hooks/usePageParams";
 import type { User } from "../../types/api";
 
@@ -20,6 +21,8 @@ const UsersPage: React.FC = () => {
     updateSearch,
     clearFilters,
   } = usePageParams();
+
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   const { data: response, error, isLoading } = useFilterUsersQuery(filters);
 
@@ -61,6 +64,15 @@ const UsersPage: React.FC = () => {
     if (!response?.data || response.data.length === 0) return [];
     return response.data[0].canBeFilteredPropsWithDropdown || [];
   }, [response?.data]);
+
+  // Handle create user modal
+  const handleCreateUser = () => {
+    setIsCreateModalOpen(true);
+  };
+
+  const handleCloseCreateModal = () => {
+    setIsCreateModalOpen(false);
+  };
 
   if (isLoading) {
     return (
@@ -125,8 +137,13 @@ const UsersPage: React.FC = () => {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h1 className={styles.title}>Users Management</h1>
-        <p className={styles.subtitle}>Manage and view all users in the system</p>
+        <div>
+          <h1 className={styles.title}>Users Management</h1>
+          <p className={styles.subtitle}>Manage and view all users in the system</p>
+        </div>
+        <button onClick={handleCreateUser} className={styles.createButton}>
+          + Create User
+        </button>
       </div>
 
       {/* Filters Section */}
@@ -228,7 +245,7 @@ const UsersPage: React.FC = () => {
           sortOrder: filters.sortOrder,
         }}
         showSearch={true}
-        clientSideSearch={true}
+        clientSideSearch={false}
       />
 
       <div className={styles.footer}>
@@ -253,6 +270,9 @@ const UsersPage: React.FC = () => {
           ))}
         </div>
       </div>
+
+      {/* Create User Modal */}
+      <CreateUserModal isOpen={isCreateModalOpen} onClose={handleCloseCreateModal} />
     </div>
   );
 };

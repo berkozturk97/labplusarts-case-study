@@ -128,9 +128,9 @@ export const usersApi = api.injectEndpoints({
       }),
       providesTags: ["Users"],
     }),
-    createUser: build.mutation({
+    createUser: build.mutation<User, Omit<User, "id">>({
       query: userData => ({
-        url: "/users",
+        url: API_URLS.USERS,
         method: "POST",
         body: userData,
       }),
