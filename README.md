@@ -448,6 +448,24 @@ const errorToastMiddleware = createErrorToastMiddleware({
 - **Stylelint**: CSS/SCSS best practices and property ordering
 - **Husky**: Pre-commit hooks prevent low-quality code commits
 
+**📝 Commit Standards**
+- **[Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/)**: Structured commit messages following the specification for better collaboration and automation
+- **Semantic Versioning**: Commits automatically trigger appropriate version bumps
+- **Automated Changelog**: Generate changelogs from commit history
+- **Commit Message Format**: `<type>[optional scope]: <description>`
+
+**Common Commit Types Used:**
+```bash
+feat: add new user creation modal component
+fix: resolve pagination issue on mobile devices
+docs: update README with setup instructions
+style: format code with prettier
+refactor: extract user validation logic to custom hook
+perf: optimize table rendering with React.memo
+test: add unit tests for error middleware
+chore: update dependencies to latest versions
+```
+
 **📊 Quality Metrics**
 - **TypeScript**: Strict mode enabled with comprehensive type coverage
 - **Bundle Size**: Optimized with tree-shaking and code splitting
