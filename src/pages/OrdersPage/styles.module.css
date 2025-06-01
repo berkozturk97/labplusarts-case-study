@@ -25,6 +25,97 @@
   margin: 0;
 }
 
+/* Filters Section */
+.filtersSection {
+  background: var(--color-background-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+}
+
+.filtersGrid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  margin-bottom: 1rem;
+}
+
+.filtersActions {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.clearFiltersButton {
+  background: var(--slate-600);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.75rem 1.5rem;
+  transition: background-color 0.2s ease;
+}
+
+.clearFiltersButton:hover {
+  background: var(--slate-700);
+}
+
+.clearFiltersButton:active {
+  background: var(--slate-800);
+}
+
+/* Debug Info */
+.debugInfo {
+  background: var(--slate-50);
+  border: 1px solid var(--slate-200);
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  padding: 1rem;
+}
+
+.debugInfo details {
+  cursor: pointer;
+}
+
+.debugInfo summary {
+  color: var(--slate-600);
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.debugInfo h4 {
+  color: var(--slate-700);
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin: 0.5rem 0 0.25rem 0;
+  text-transform: uppercase;
+}
+
+.debugInfo div:first-of-type h4 {
+  margin-top: 0;
+}
+
+.debugInfo pre {
+  background: var(--color-background-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  color: var(--color-text-primary);
+  font-family: "Courier New", monospace;
+  font-size: 0.75rem;
+  margin: 0 0 0.75rem 0;
+  overflow-x: auto;
+  padding: 0.75rem;
+  white-space: pre-wrap;
+}
+
+.debugInfo div:last-child pre {
+  margin-bottom: 0;
+}
+
 /* Error States */
 .error {
   background: var(--color-background-primary);
@@ -110,6 +201,16 @@
     text-align: left;
   }
 
+  .filtersSection {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+  }
+
+  .filtersGrid {
+    gap: 1rem;
+    grid-template-columns: 1fr;
+  }
+
   .footer {
     margin-top: 1.5rem;
   }
@@ -143,6 +244,10 @@
     padding: 1.5rem;
   }
 
+  .filtersSection {
+    padding: 0.75rem;
+  }
+
   .stats {
     padding: 0.75rem;
   }
@@ -157,5 +262,14 @@
 
   .statValue {
     font-size: 1.125rem;
+  }
+
+  .debugInfo {
+    padding: 0.75rem;
+  }
+
+  .debugInfo pre {
+    font-size: 0.7rem;
+    padding: 0.5rem;
   }
 }

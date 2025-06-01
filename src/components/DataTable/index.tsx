@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from "react";
 import styles from "./styles.module.css";
+import Pagination from "../Pagination";
 
 // Generic column configuration interface
 export interface TableColumn<T = Record<string, unknown>> {
@@ -11,6 +12,21 @@ export interface TableColumn<T = Record<string, unknown>> {
   sortable?: boolean;
   width?: string;
   align?: "left" | "center" | "right";
+}
+
+// Pagination info interface
+export interface PaginationInfo {
+  currentPage: number;
+  totalItems: number;
+  pageSize: number;
+  totalPages: number;
+  // JSON Server navigation info
+  navigation?: {
+    first: number;
+    prev: number | null;
+    next: number | null;
+    last: number;
+  };
 }
 
 // Generic table props interface
@@ -25,6 +41,23 @@ export interface DataTableProps<T = Record<string, unknown>> {
   showRowNumbers?: boolean;
   onRowClick?: (record: T, index: number) => void;
   className?: string;
+
+  // Pagination props
+  pagination?: PaginationInfo;
+  onPageChange?: (page: number) => void;
+  onPageSizeChange?: (pageSize: number) => void;
+  showPagination?: boolean;
+
+  // Granular control for client-side vs server-side operations
+  clientSideSearch?: boolean;
+  clientSideSorting?: boolean;
+
+  // Sorting props
+  onSort?: (sortBy: string, sortOrder: "asc" | "desc") => void;
+  currentSort?: {
+    sortBy?: string;
+    sortOrder?: "asc" | "desc";
+  };
 }
 
 // Helper function to generate columns from property names
@@ -85,6 +118,14 @@ const DataTable = <T extends Record<string, unknown>>({
   showRowNumbers = false,
   onRowClick,
   className,
+  pagination,
+  onPageChange,
+  onPageSizeChange,
+  showPagination = true,
+  clientSideSearch,
+  clientSideSorting,
+  onSort,
+  currentSort,
 }: DataTableProps<T>): React.ReactElement => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortConfig, setSortConfig] = useState<{
@@ -103,8 +144,11 @@ const DataTable = <T extends Record<string, unknown>>({
     return [];
   }, [columns, columnNames]);
 
-  // Filter data based on search term
+  // Filter data based on search term (only for client-side search when no pagination)
   const filteredData = useMemo(() => {
+    // If pagination is provided and it's server-side, don't filter client-side
+    if (pagination && !clientSideSearch) return data;
+
     if (!searchTerm.trim()) return data;
 
     const searchLower = searchTerm.toLowerCase();
@@ -117,10 +161,13 @@ const DataTable = <T extends Record<string, unknown>>({
           return String(value).toLowerCase().includes(searchLower);
         });
     });
-  }, [data, searchTerm, tableColumns]);
+  }, [data, searchTerm, tableColumns, pagination, clientSideSearch]);
 
-  // Sort filtered data
+  // Sort filtered data (only for client-side sorting when no pagination)
   const sortedData = useMemo(() => {
+    // If pagination is provided and it's server-side, don't sort client-side
+    if (pagination && !clientSideSorting) return filteredData;
+
     if (!sortConfig.key) return filteredData;
 
     return [...filteredData].sort((a, b) => {
@@ -137,21 +184,36 @@ const DataTable = <T extends Record<string, unknown>>({
 
       return sortConfig.direction === "desc" ? comparison * -1 : comparison;
     });
-  }, [filteredData, sortConfig]);
+  }, [filteredData, sortConfig, pagination, clientSideSorting]);
 
   // Handle column sorting
   const handleSort = (columnKey: keyof T) => {
     const column = tableColumns.find(col => col.dataIndex === columnKey);
     if (!column?.sortable) return;
 
-    setSortConfig(prevSort => ({
-      key: columnKey,
-      direction: prevSort.key === columnKey && prevSort.direction === "asc" ? "desc" : "asc",
-    }));
+    // If pagination is provided and it's server-side, use server-side sorting
+    if (pagination && !clientSideSorting && onSort) {
+      const newDirection =
+        currentSort?.sortBy === String(columnKey) && currentSort?.sortOrder === "asc" ? "desc" : "asc";
+      onSort(String(columnKey), newDirection);
+    } else {
+      // Use client-side sorting
+      setSortConfig(prevSort => ({
+        key: columnKey,
+        direction: prevSort.key === columnKey && prevSort.direction === "asc" ? "desc" : "asc",
+      }));
+    }
   };
 
   // Get sort icon for column
   const getSortIcon = (columnKey: keyof T) => {
+    // If using server-side sorting, use currentSort
+    if (pagination && !clientSideSorting && currentSort) {
+      if (currentSort.sortBy !== String(columnKey)) return "↕️";
+      return currentSort.sortOrder === "asc" ? "↑" : "↓";
+    }
+
+    // Otherwise use local sortConfig
     if (sortConfig.key !== columnKey) return "↕️";
     return sortConfig.direction === "asc" ? "↑" : "↓";
   };
@@ -174,6 +236,8 @@ const DataTable = <T extends Record<string, unknown>>({
     );
   }
 
+  const displayData = sortedData;
+
   return (
     <div className={`${styles.container} ${className || ""}`}>
       {/* Search Bar */}
@@ -192,34 +256,49 @@ const DataTable = <T extends Record<string, unknown>>({
 
       {/* Results Info */}
       <div className={styles.resultsInfo}>
-        Showing {sortedData.length} of {data.length} results
-        {searchTerm && (
-          <span className={styles.searchInfo}>
-            {" "}
-            for "{searchTerm}"
-            <button onClick={() => setSearchTerm("")} className={styles.clearSearch}>
-              ✕
-            </button>
-          </span>
+        {pagination ? (
+          <>
+            Showing {(pagination.currentPage - 1) * pagination.pageSize + 1} to{" "}
+            {Math.min(pagination.currentPage * pagination.pageSize, pagination.totalItems)} of {pagination.totalItems}{" "}
+            results
+          </>
+        ) : (
+          <>
+            Showing {displayData.length} of {data.length} results
+            {searchTerm && (
+              <span className={styles.searchInfo}>
+                {" "}
+                for "{searchTerm}"
+                <button onClick={() => setSearchTerm("")} className={styles.clearSearch}>
+                  ✕
+                </button>
+              </span>
+            )}
+          </>
         )}
       </div>
 
       {/* Table */}
       <div className={styles.tableWrapper}>
         <table className={styles.table}>
-          <thead className={styles.tableHead}>
+          <thead className={styles.thead}>
             <tr>
-              {showRowNumbers && <th className={styles.rowNumberHeader}>#</th>}
+              {showRowNumbers && (
+                <th className={styles.th} style={{ width: "60px" }}>
+                  #
+                </th>
+              )}
               {tableColumns.map(column => (
                 <th
                   key={column.key}
-                  className={`${styles.tableHeader} ${
-                    column.sortable ? styles.sortable : ""
-                  } ${styles[`align${column.align || "left"}`]}`}
-                  style={{ width: column.width }}
+                  className={`${styles.th} ${column.sortable ? styles.sortable : ""}`}
+                  style={{
+                    width: column.width,
+                    textAlign: column.align || "left",
+                  }}
                   onClick={() => column.sortable && handleSort(column.dataIndex)}
                 >
-                  <div className={styles.headerContent}>
+                  <div className={styles.thContent}>
                     <span>{column.title}</span>
                     {column.sortable && <span className={styles.sortIcon}>{getSortIcon(column.dataIndex)}</span>}
                   </div>
@@ -227,40 +306,52 @@ const DataTable = <T extends Record<string, unknown>>({
               ))}
             </tr>
           </thead>
-          <tbody className={styles.tableBody}>
-            {sortedData.length === 0 ? (
+          <tbody className={styles.tbody}>
+            {displayData.length === 0 ? (
               <tr>
                 <td colSpan={tableColumns.length + (showRowNumbers ? 1 : 0)} className={styles.emptyCell}>
                   {emptyText}
                 </td>
               </tr>
             ) : (
-              sortedData.map((record, index) => (
-                <tr
-                  key={index}
-                  className={`${styles.tableRow} ${onRowClick ? styles.clickable : ""}`}
-                  onClick={() => handleRowClick(record, index)}
-                >
-                  {showRowNumbers && <td className={styles.rowNumberCell}>{index + 1}</td>}
-                  {tableColumns.map(column => {
-                    const value = record[column.dataIndex];
-                    const displayValue = column.render ? column.render(value, record, index) : String(value ?? "");
+              displayData.map((record, index) => {
+                const actualIndex = pagination
+                  ? (pagination.currentPage - 1) * pagination.pageSize + index + 1
+                  : index + 1;
 
-                    return (
-                      <td
-                        key={column.key}
-                        className={`${styles.tableCell} ${styles[`align${column.align || "left"}`]}`}
-                      >
-                        {displayValue}
+                return (
+                  <tr
+                    key={index}
+                    className={`${styles.tr} ${onRowClick ? styles.clickable : ""}`}
+                    onClick={() => handleRowClick(record, index)}
+                  >
+                    {showRowNumbers && <td className={styles.td}>{actualIndex}</td>}
+                    {tableColumns.map(column => (
+                      <td key={column.key} className={styles.td} style={{ textAlign: column.align || "left" }}>
+                        {column.render
+                          ? column.render(record[column.dataIndex], record, index)
+                          : String(record[column.dataIndex] ?? "")}
                       </td>
-                    );
-                  })}
-                </tr>
-              ))
+                    ))}
+                  </tr>
+                );
+              })
             )}
           </tbody>
         </table>
       </div>
+
+      {/* Pagination */}
+      {showPagination && pagination && onPageChange && onPageSizeChange && (
+        <Pagination
+          currentPage={pagination.currentPage}
+          totalItems={pagination.totalItems}
+          pageSize={pagination.pageSize}
+          onPageChange={onPageChange}
+          onPageSizeChange={onPageSizeChange}
+          disabled={loading}
+        />
+      )}
     </div>
   );
 };

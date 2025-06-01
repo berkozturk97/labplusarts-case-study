@@ -1,0 +1,142 @@
+.container {
+  background: var(--color-background-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 1rem;
+  width: 100%;
+}
+
+/* Header */
+.header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.label {
+  color: var(--color-text-primary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.clearButton {
+  background: transparent;
+  border: 1px solid var(--slate-300);
+  border-radius: 6px;
+  color: var(--slate-600);
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.25rem 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.clearButton:hover:not(:disabled) {
+  background: var(--slate-50);
+  border-color: var(--slate-400);
+  color: var(--slate-700);
+}
+
+.clearButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Input Group */
+.inputGroup {
+  align-items: end;
+  display: flex;
+  gap: 0.75rem;
+}
+
+.inputWrapper {
+  flex: 1;
+}
+
+.inputLabel {
+  color: var(--color-text-secondary);
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+  text-transform: uppercase;
+}
+
+.dateInput {
+  background: var(--color-background-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  color: var(--color-text-primary);
+  font-size: 0.875rem;
+  height: 2.5rem;
+  padding: 0 0.75rem;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.dateInput:focus {
+  border-color: var(--slate-500);
+  box-shadow: 0 0 0 3px rgba(71, 85, 105, 0.1);
+  outline: none;
+}
+
+.dateInput:disabled {
+  background: var(--slate-50);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.separator {
+  align-items: center;
+  display: flex;
+  height: 2.5rem;
+  justify-content: center;
+  margin: 0 0.25rem;
+}
+
+.separator span {
+  color: var(--color-text-secondary);
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+  .container {
+    padding: 0.75rem;
+  }
+
+  .inputGroup {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .separator {
+    height: auto;
+    margin: 0;
+    padding: 0.25rem 0;
+  }
+
+  .separator span {
+    font-size: 0.7rem;
+  }
+
+  .dateInput {
+    height: 2.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .clearButton {
+    align-self: flex-end;
+  }
+}

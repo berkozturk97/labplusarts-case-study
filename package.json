@@ -22,8 +22,10 @@
     "format": "npm run format:scripts && npm run format:styles",
     "preview": "vite preview",
     "prepare": "husky",
-    "json-server": "json-server --watch db.json --port 3001",
+    "json-server": "json-server --watch db.json --port 3001 --host localhost",
+    "json-server:debug": "json-server --watch db.json --port 3001 --host localhost --middlewares ./json-server-middlewares.js",
     "dev:full": "concurrently \"npm run dev\" \"npm run json-server\"",
+    "dev:debug": "concurrently \"npm run dev\" \"npm run json-server:debug\"",
     "api": "json-server --watch db.json --port 3001 --delay 500"
   },
   "dependencies": {

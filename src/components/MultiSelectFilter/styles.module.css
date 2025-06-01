@@ -1,0 +1,268 @@
+.container {
+  position: relative;
+  width: 100%;
+}
+
+/* Header */
+.header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.label {
+  color: var(--color-text-primary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.selectedCount {
+  background: var(--slate-100);
+  border-radius: 12px;
+  color: var(--slate-600);
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.25rem 0.5rem;
+}
+
+/* Dropdown */
+.dropdown {
+  position: relative;
+}
+
+.trigger {
+  align-items: center;
+  background: var(--color-background-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  display: flex;
+  font-size: 0.875rem;
+  justify-content: space-between;
+  min-height: 2.5rem;
+  padding: 0 0.75rem;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.trigger:hover:not(:disabled) {
+  border-color: var(--slate-400);
+}
+
+.trigger:focus {
+  border-color: var(--slate-500);
+  box-shadow: 0 0 0 3px rgba(71, 85, 105, 0.1);
+  outline: none;
+}
+
+.trigger:disabled {
+  background: var(--slate-50);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.triggerOpen {
+  border-color: var(--slate-500);
+  box-shadow: 0 0 0 3px rgba(71, 85, 105, 0.1);
+}
+
+.triggerText {
+  flex: 1;
+  overflow: hidden;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chevron {
+  color: var(--color-text-secondary);
+  font-size: 0.75rem;
+  margin-left: 0.5rem;
+  transition: transform 0.2s ease;
+}
+
+.chevronUp {
+  transform: rotate(180deg);
+}
+
+/* Content */
+.content {
+  background: var(--color-background-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  left: 0;
+  margin-top: 0.25rem;
+  overflow: hidden;
+  position: absolute;
+  right: 0;
+  z-index: 50;
+}
+
+/* Search */
+.searchWrapper {
+  border-bottom: 1px solid var(--color-border);
+  padding: 0.75rem;
+}
+
+.searchInput {
+  background: var(--color-background-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  color: var(--color-text-primary);
+  font-size: 0.875rem;
+  padding: 0.5rem 0.75rem;
+  width: 100%;
+}
+
+.searchInput:focus {
+  border-color: var(--slate-500);
+  box-shadow: 0 0 0 2px rgba(71, 85, 105, 0.1);
+  outline: none;
+}
+
+.searchInput::placeholder {
+  color: var(--color-text-secondary);
+}
+
+/* Actions */
+.actions {
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.75rem;
+}
+
+.actionButton {
+  background: transparent;
+  border: 1px solid var(--slate-300);
+  border-radius: 6px;
+  color: var(--slate-600);
+  cursor: pointer;
+  flex: 1;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.actionButton:hover:not(:disabled) {
+  background: var(--slate-50);
+  border-color: var(--slate-400);
+  color: var(--slate-700);
+}
+
+.actionButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Options List */
+.optionsList {
+  max-height: inherit;
+  overflow-y: auto;
+}
+
+.option {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  transition: background-color 0.2s ease;
+}
+
+.option:hover {
+  background: var(--slate-50);
+}
+
+.optionSelected {
+  background: var(--slate-100);
+}
+
+.optionSelected:hover {
+  background: var(--slate-150);
+}
+
+.checkbox {
+  cursor: pointer;
+  height: 1rem;
+  margin: 0;
+  width: 1rem;
+}
+
+.optionText {
+  color: var(--color-text-primary);
+  flex: 1;
+  font-size: 0.875rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.checkmark {
+  color: var(--slate-600);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.noOptions {
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  padding: 1rem;
+  text-align: center;
+}
+
+/* Backdrop */
+.backdrop {
+  background: transparent;
+  bottom: 0;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 40;
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+  .content {
+    left: -1rem;
+    right: -1rem;
+  }
+
+  .searchWrapper,
+  .actions {
+    padding: 0.5rem;
+  }
+
+  .option {
+    padding: 0.5rem;
+  }
+
+  .actionButton {
+    font-size: 0.7rem;
+    padding: 0.375rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .selectedCount {
+    align-self: flex-end;
+  }
+
+  .triggerText {
+    font-size: 0.8rem;
+  }
+}
