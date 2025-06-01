@@ -116,7 +116,12 @@ const MultiSelectFilterComponent: React.FC<MultiSelectFilterProps> = ({
               </button>
             </div>
 
-            <div className={styles.optionsList}>
+            <div
+              className={styles.optionsList}
+              style={{
+                maxHeight: `calc(${maxHeight} - 120px)`, // Subtract space for search and actions
+              }}
+            >
               {filteredOptions.length === 0 ? (
                 <div className={styles.noOptions}>{searchTerm ? "No options found" : "No options available"}</div>
               ) : (

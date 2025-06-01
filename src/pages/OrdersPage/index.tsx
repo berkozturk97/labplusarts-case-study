@@ -129,6 +129,7 @@ const OrdersPage: React.FC = () => {
 
         {/* Dropdown Filters Column */}
         <div className={styles.dropdownFiltersColumn}>
+          {/* Dynamic MultiSelect Filters */}
           {filterableFields.map(fieldName => (
             <MultiSelectFilterComponent
               key={fieldName}
@@ -137,7 +138,7 @@ const OrdersPage: React.FC = () => {
               value={filters.multiSelect[fieldName]}
               onChange={values => updateMultiSelect(fieldName, values)}
               placeholder={`Search ${getFieldDisplayLabel(fieldName).toLowerCase()}...`}
-              maxHeight="300px"
+              maxHeight="350px"
             />
           ))}
         </div>

@@ -96,8 +96,11 @@
   box-shadow:
     0 4px 6px -1px rgba(0, 0, 0, 0.1),
     0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
   left: 0;
   margin-top: 0.25rem;
+  max-height: 400px;
   overflow: hidden;
   position: absolute;
   right: 0;
@@ -164,8 +167,29 @@
 
 /* Options List */
 .optionsList {
-  max-height: inherit;
+  flex: 1;
+  max-height: 200px;
+  min-height: 0;
   overflow-y: auto;
+}
+
+/* Custom scrollbar for options list */
+.optionsList::-webkit-scrollbar {
+  width: 6px;
+}
+
+.optionsList::-webkit-scrollbar-track {
+  background: var(--slate-100);
+  border-radius: 3px;
+}
+
+.optionsList::-webkit-scrollbar-thumb {
+  background: var(--slate-300);
+  border-radius: 3px;
+}
+
+.optionsList::-webkit-scrollbar-thumb:hover {
+  background: var(--slate-400);
 }
 
 .option {
