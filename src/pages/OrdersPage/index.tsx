@@ -10,8 +10,16 @@ import { usePageParams } from "../../hooks/usePageParams";
 import type { Order } from "../../types/api";
 
 const OrdersPage: React.FC = () => {
-  const { filters, updateDateRange, updateExactDate, updateMultiSelect, updatePagination, updateSort, clearFilters } =
-    usePageParams();
+  const {
+    filters,
+    updateDateRange,
+    updateExactDate,
+    updateMultiSelect,
+    updatePagination,
+    updateSort,
+    updateSearch,
+    clearFilters,
+  } = usePageParams();
 
   const { data: response, error, isLoading } = useFilterOrdersQuery(filters);
 
@@ -212,13 +220,13 @@ const OrdersPage: React.FC = () => {
         onPageChange={(page: number) => updatePagination({ page })}
         onPageSizeChange={(pageSize: number) => updatePagination({ page: 1, pageSize })}
         onSort={(sortBy: string, sortOrder: "asc" | "desc") => updateSort(sortBy, sortOrder)}
+        onSearch={(searchTerm: string) => updateSearch(searchTerm)}
         currentSort={{
           sortBy: filters.sortBy,
           sortOrder: filters.sortOrder,
         }}
-        showSearch={true} // Enable table search
-        clientSideSearch={true} // Search works on current data (client-side)
-        clientSideSorting={false} // Sorting uses server-side logic via usePageParams
+        showSearch={true}
+        clientSideSearch={true}
       />
 
       <div className={styles.footer}>

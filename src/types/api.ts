@@ -6,6 +6,7 @@ export interface User {
   role: "Admin" | "Manager" | "User";
   createdAt: string;
   isActive: boolean;
+  canBeFilteredPropsWithDropdown?: string[]; // Fields that can be filtered with dropdown
 }
 
 // Order interface

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
 import styles from "./styles.module.css";
 import Pagination from "../Pagination";
 
@@ -50,7 +50,6 @@ export interface DataTableProps<T = Record<string, unknown>> {
 
   // Granular control for client-side vs server-side operations
   clientSideSearch?: boolean;
-  clientSideSorting?: boolean;
 
   // Sorting props
   onSort?: (sortBy: string, sortOrder: "asc" | "desc") => void;
@@ -58,6 +57,9 @@ export interface DataTableProps<T = Record<string, unknown>> {
     sortBy?: string;
     sortOrder?: "asc" | "desc";
   };
+
+  // Search props
+  onSearch?: (searchTerm: string) => void;
 }
 
 // Helper function to generate columns from property names
@@ -123,15 +125,35 @@ const DataTable = <T extends Record<string, unknown>>({
   onPageSizeChange,
   showPagination = true,
   clientSideSearch,
-  clientSideSorting,
   onSort,
   currentSort,
+  onSearch,
 }: DataTableProps<T>): React.ReactElement => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortConfig, setSortConfig] = useState<{
     key: keyof T | null;
     direction: "asc" | "desc";
   }>({ key: null, direction: "asc" });
+
+  // Use ref to track the last search term that was sent to the server
+  const lastSearchTermRef = useRef<string>("");
+
+  // Debounce search for server-side search - only when search term actually changes
+  useEffect(() => {
+    if (onSearch && pagination && !clientSideSearch && searchTerm !== lastSearchTermRef.current) {
+      const timeoutId = setTimeout(() => {
+        onSearch(searchTerm);
+        lastSearchTermRef.current = searchTerm;
+      }, 300);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [searchTerm, onSearch, pagination, clientSideSearch]);
+
+  // Handle search term changes
+  const handleSearchChange = (value: string) => {
+    setSearchTerm(value);
+  };
 
   // Generate columns from either predefined columns or column names
   const tableColumns = useMemo(() => {
@@ -166,7 +188,7 @@ const DataTable = <T extends Record<string, unknown>>({
   // Sort filtered data (only for client-side sorting when no pagination)
   const sortedData = useMemo(() => {
     // If pagination is provided and it's server-side, don't sort client-side
-    if (pagination && !clientSideSorting) return filteredData;
+    if (pagination) return filteredData;
 
     if (!sortConfig.key) return filteredData;
 
@@ -184,7 +206,7 @@ const DataTable = <T extends Record<string, unknown>>({
 
       return sortConfig.direction === "desc" ? comparison * -1 : comparison;
     });
-  }, [filteredData, sortConfig, pagination, clientSideSorting]);
+  }, [filteredData, sortConfig, pagination]);
 
   // Handle column sorting
   const handleSort = (columnKey: keyof T) => {
@@ -192,7 +214,7 @@ const DataTable = <T extends Record<string, unknown>>({
     if (!column?.sortable) return;
 
     // If pagination is provided and it's server-side, use server-side sorting
-    if (pagination && !clientSideSorting && onSort) {
+    if (pagination && onSort) {
       const newDirection =
         currentSort?.sortBy === String(columnKey) && currentSort?.sortOrder === "asc" ? "desc" : "asc";
       onSort(String(columnKey), newDirection);
@@ -208,7 +230,7 @@ const DataTable = <T extends Record<string, unknown>>({
   // Get sort icon for column
   const getSortIcon = (columnKey: keyof T) => {
     // If using server-side sorting, use currentSort
-    if (pagination && !clientSideSorting && currentSort) {
+    if (pagination && currentSort) {
       if (currentSort.sortBy !== String(columnKey)) return "↕️";
       return currentSort.sortOrder === "asc" ? "↑" : "↓";
     }
@@ -247,7 +269,7 @@ const DataTable = <T extends Record<string, unknown>>({
             type="text"
             placeholder={searchPlaceholder}
             value={searchTerm}
-            onChange={e => setSearchTerm(e.target.value)}
+            onChange={e => handleSearchChange(e.target.value)}
             className={styles.searchInput}
           />
           <span className={styles.searchIcon}>🔍</span>
