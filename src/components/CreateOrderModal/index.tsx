@@ -1,25 +1,25 @@
 import React from "react";
 import Modal from "../Modal";
-import UserForm from "../UserForm";
-import { useUserManagement } from "../../hooks/useUserManagement";
-import type { UserFormData } from "../UserForm";
+import OrderForm from "../OrderForm";
+import { useOrderManagement } from "../../hooks/useOrderManagement";
+import type { OrderFormData } from "../OrderForm";
 
-export interface CreateUserModalProps {
+export interface CreateOrderModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSuccess?: (userData: UserFormData) => void;
+  onSuccess?: (orderData: OrderFormData) => void;
 }
 
-const CreateUserModal: React.FC<CreateUserModalProps> = ({ isOpen, onClose, onSuccess }) => {
-  const { createUser, isCreating, error } = useUserManagement();
+const CreateOrderModal: React.FC<CreateOrderModalProps> = ({ isOpen, onClose, onSuccess }) => {
+  const { createOrder, isCreating, error } = useOrderManagement();
 
-  const handleSubmit = async (userData: UserFormData): Promise<void> => {
+  const handleSubmit = async (orderData: OrderFormData): Promise<void> => {
     try {
-      await createUser(userData);
-      onSuccess?.(userData);
+      await createOrder(orderData);
+      onSuccess?.(orderData);
       onClose();
     } catch {
-      console.error("Error creating user:", error);
+      console.error("Error creating order:", error);
     }
   };
 
@@ -31,16 +31,16 @@ const CreateUserModal: React.FC<CreateUserModalProps> = ({ isOpen, onClose, onSu
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title="Create New User"
+      title="Create New Order"
       size="medium"
-      closeOnBackdropClick={!isCreating}
-      closeOnEscape={!isCreating}
+      closeOnBackdropClick={!isCreating} // Prevent closing while creating
+      closeOnEscape={!isCreating} // Prevent escape while creating
     >
-      <UserForm
+      <OrderForm
         onSubmit={handleSubmit}
         onCancel={handleCancel}
         isLoading={isCreating}
-        submitButtonText="Create User"
+        submitButtonText="Create Order"
         showCancelButton={true}
       />
 
@@ -64,4 +64,4 @@ const CreateUserModal: React.FC<CreateUserModalProps> = ({ isOpen, onClose, onSu
   );
 };
 
-export default CreateUserModal;
+export default CreateOrderModal;

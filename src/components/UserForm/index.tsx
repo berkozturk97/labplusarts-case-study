@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import type { SubmitHandler } from "react-hook-form";
 import styles from "./styles.module.css";
 
-// User form data interface (excluding auto-generated fields)
 export interface UserFormData {
   name: string;
   email: string;
@@ -11,7 +10,6 @@ export interface UserFormData {
   isActive: boolean;
 }
 
-// Form props interface
 export interface UserFormProps {
   onSubmit: (data: UserFormData) => void | Promise<void>;
   onCancel?: () => void;
@@ -41,10 +39,9 @@ const UserForm: React.FC<UserFormProps> = ({
       role: initialData?.role || "User",
       isActive: initialData?.isActive ?? true,
     },
-    mode: "onBlur", // Validate on blur for better UX
+    mode: "onBlur",
   });
 
-  // Handle form submission
   const onSubmitHandler: SubmitHandler<UserFormData> = async data => {
     try {
       await onSubmit(data);
@@ -52,7 +49,6 @@ const UserForm: React.FC<UserFormProps> = ({
         reset();
       }
     } catch (error) {
-      // Error handling is done in parent component via toast
       console.error("Form submission error:", error);
     }
   };
@@ -66,7 +62,6 @@ const UserForm: React.FC<UserFormProps> = ({
 
   return (
     <form onSubmit={handleSubmit(onSubmitHandler)} className={styles.form}>
-      {/* Name Field */}
       <div className={styles.field}>
         <label htmlFor="name" className={styles.label}>
           Full Name <span className={styles.required}>*</span>
@@ -100,7 +95,6 @@ const UserForm: React.FC<UserFormProps> = ({
         )}
       </div>
 
-      {/* Email Field */}
       <div className={styles.field}>
         <label htmlFor="email" className={styles.label}>
           Email Address <span className={styles.required}>*</span>
@@ -130,7 +124,6 @@ const UserForm: React.FC<UserFormProps> = ({
         )}
       </div>
 
-      {/* Role Field */}
       <div className={styles.field}>
         <label htmlFor="role" className={styles.label}>
           Role <span className={styles.required}>*</span>
@@ -154,7 +147,6 @@ const UserForm: React.FC<UserFormProps> = ({
         )}
       </div>
 
-      {/* Status Field */}
       <div className={styles.field}>
         <label className={styles.checkboxLabel}>
           <input type="checkbox" className={styles.checkbox} disabled={isFormDisabled} {...register("isActive")} />
@@ -163,7 +155,6 @@ const UserForm: React.FC<UserFormProps> = ({
         <span className={styles.helpText}>Active users can log in and access the system</span>
       </div>
 
-      {/* Form Actions */}
       <div className={styles.actions}>
         {showCancelButton && (
           <button type="button" className={styles.cancelButton} onClick={handleCancel} disabled={isFormDisabled}>

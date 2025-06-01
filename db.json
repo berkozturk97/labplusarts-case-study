@@ -208,6 +208,15 @@
       "orderDate": "2025-03-08",
       "total": 678.9,
       "canBeFilteredPropsWithDropdown": ["customer", "status"]
+    },
+    {
+      "id": "60b0",
+      "customer": "Alan Rickman",
+      "status": "Pending",
+      "total": 2000,
+      "orderNumber": "ORD-814474",
+      "orderDate": "2025-06-01",
+      "canBeFilteredPropsWithDropdown": ["customer", "status"]
     }
   ]
 }

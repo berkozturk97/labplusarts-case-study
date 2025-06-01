@@ -128,9 +128,9 @@ export const ordersApi = api.injectEndpoints({
       }),
       providesTags: ["Orders"],
     }),
-    createOrder: build.mutation({
+    createOrder: build.mutation<Order, Omit<Order, "id">>({
       query: orderData => ({
-        url: "/orders",
+        url: API_URLS.ORDERS,
         method: "POST",
         body: orderData,
       }),

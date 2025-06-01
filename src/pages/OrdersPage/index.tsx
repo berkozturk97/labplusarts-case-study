@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import styles from "./styles.module.css";
 import { useFilterOrdersQuery } from "../../services/orders";
 import DataTable from "../../components/DataTable";
@@ -6,6 +6,7 @@ import LoadingSpinner from "../../components/LoadingSpinner";
 import DateRangeFilterComponent from "../../components/DateRangeFilter";
 import ExactDateFilterComponent from "../../components/ExactDateFilter";
 import MultiSelectFilterComponent from "../../components/MultiSelectFilter";
+import CreateOrderModal from "../../components/CreateOrderModal";
 import { usePageParams } from "../../hooks/usePageParams";
 import type { Order } from "../../types/api";
 
@@ -20,6 +21,8 @@ const OrdersPage: React.FC = () => {
     updateSearch,
     clearFilters,
   } = usePageParams();
+
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   const { data: response, error, isLoading } = useFilterOrdersQuery(filters);
 
@@ -41,7 +44,9 @@ const OrdersPage: React.FC = () => {
             .map(order => {
               // Safe field access
               const orderRecord = order as unknown as Record<string, unknown>;
-              return orderRecord[fieldName];
+              const value = orderRecord[fieldName];
+              // Convert boolean to string for filtering
+              return typeof value === "boolean" ? String(value) : value;
             })
             .filter(value => value != null && value !== "")
             .map(value => String(value)) // Convert to string for consistent typing
@@ -59,6 +64,15 @@ const OrdersPage: React.FC = () => {
     if (!response?.data || response.data.length === 0) return [];
     return response.data[0].canBeFilteredPropsWithDropdown || [];
   }, [response?.data]);
+
+  // Handle create order modal
+  const handleCreateOrder = () => {
+    setIsCreateModalOpen(true);
+  };
+
+  const handleCloseCreateModal = () => {
+    setIsCreateModalOpen(false);
+  };
 
   if (isLoading) {
     return (
@@ -84,10 +98,10 @@ const OrdersPage: React.FC = () => {
   const columnNames = response?.tableColumnNames || [];
   const paginationInfo = response
     ? {
-        currentPage: response.currentPage,
-        totalItems: response.totalItems,
-        pageSize: response.pageSize,
-        totalPages: response.totalPages,
+        currentPage: response.currentPage || 1,
+        totalItems: response.totalItems || 0,
+        pageSize: response.pageSize || 10,
+        totalPages: response.totalPages || 1,
         navigation:
           response.data && response.totalPages
             ? {
@@ -101,14 +115,12 @@ const OrdersPage: React.FC = () => {
     : undefined;
 
   // Calculate statistics from current page data
-  const totalRevenue = orders
-    .filter((order: Order) => order.status !== "Cancelled")
-    .reduce((sum: number, order: Order) => sum + order.total, 0);
-
   const statusCounts = orders.reduce((acc: Record<string, number>, order: Order) => {
     acc[order.status] = (acc[order.status] || 0) + 1;
     return acc;
   }, {});
+
+  const totalOrderValue = orders.reduce((sum: number, order: Order) => sum + order.total, 0);
 
   // Helper function to get display label for field names
   const getFieldDisplayLabel = (fieldName: string): string => {
@@ -123,8 +135,13 @@ const OrdersPage: React.FC = () => {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h1 className={styles.title}>Orders Management</h1>
-        <p className={styles.subtitle}>Track and manage all customer orders</p>
+        <div>
+          <h1 className={styles.title}>Orders Management</h1>
+          <p className={styles.subtitle}>Manage and view all orders in the system</p>
+        </div>
+        <button onClick={handleCreateOrder} className={styles.createButton}>
+          + Create Order
+        </button>
       </div>
 
       {/* Filters Section */}
@@ -226,7 +243,7 @@ const OrdersPage: React.FC = () => {
           sortOrder: filters.sortOrder,
         }}
         showSearch={true}
-        clientSideSearch={true}
+        clientSideSearch={false}
       />
 
       <div className={styles.footer}>
@@ -236,8 +253,8 @@ const OrdersPage: React.FC = () => {
             <span className={styles.statValue}>{paginationInfo?.totalItems || 0}</span>
           </div>
           <div className={styles.statItem}>
-            <span className={styles.statLabel}>Current Page Revenue:</span>
-            <span className={styles.statValue}>${totalRevenue.toFixed(2)}</span>
+            <span className={styles.statLabel}>Page Total Value:</span>
+            <span className={styles.statValue}>${totalOrderValue.toFixed(2)}</span>
           </div>
           {Object.entries(statusCounts).map(([status, count]) => (
             <div key={status} className={styles.statItem}>
@@ -247,6 +264,9 @@ const OrdersPage: React.FC = () => {
           ))}
         </div>
       </div>
+
+      {/* Create Order Modal */}
+      <CreateOrderModal isOpen={isCreateModalOpen} onClose={handleCloseCreateModal} />
     </div>
   );
 };
