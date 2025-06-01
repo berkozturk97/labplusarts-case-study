@@ -19,10 +19,7 @@ import { errorToastMiddleware } from "../middleware/errorToastMiddleware";
 
 export const store = configureStore({
   // ... other config
-  middleware: getDefaultMiddleware =>
-    getDefaultMiddleware()
-      .concat(api.middleware)
-      .concat(errorToastMiddleware),
+  middleware: getDefaultMiddleware => getDefaultMiddleware().concat(api.middleware).concat(errorToastMiddleware),
 });
 ```
 
@@ -34,11 +31,11 @@ You can customize the middleware behavior by creating a configured instance:
 import { createErrorToastMiddleware } from "../middleware/errorToastMiddleware";
 
 const customErrorMiddleware = createErrorToastMiddleware({
-  showNetworkErrors: true,     // Show connection/timeout errors
-  showValidationErrors: true,  // Show 4xx client errors
-  showServerErrors: true,      // Show 5xx server errors
+  showNetworkErrors: true, // Show connection/timeout errors
+  showValidationErrors: true, // Show 4xx client errors
+  showServerErrors: true, // Show 5xx server errors
   defaultErrorMessage: "Custom error message",
-  toastDuration: 5000,        // Toast display duration in ms
+  toastDuration: 5000, // Toast display duration in ms
 });
 ```
 
@@ -86,4 +83,4 @@ try {
   // Error toast is automatically shown by middleware
   // Just handle any cleanup if needed
 }
-``` 
+```
