@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import styles from "./styles.module.css";
 import type { DateRangeFilter } from "../../hooks/usePageParams";
 
@@ -19,6 +19,9 @@ const DateRangeFilterComponent: React.FC<DateRangeFilterProps> = ({
   disabled = false,
   className,
 }) => {
+  const startDateRef = useRef<HTMLInputElement>(null);
+  const endDateRef = useRef<HTMLInputElement>(null);
+
   const handleStartDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const startDate = event.target.value || undefined;
     onChange({
@@ -38,6 +41,29 @@ const DateRangeFilterComponent: React.FC<DateRangeFilterProps> = ({
   const handleClear = () => {
     onChange({ startDate: undefined, endDate: undefined });
     onClear?.();
+  };
+
+  // Handler to focus and show calendar when clicking anywhere on input
+  const handleStartDateClick = () => {
+    if (!disabled && startDateRef.current) {
+      startDateRef.current.focus();
+      // Use type assertion for showPicker as it's not in all TypeScript versions
+      const picker = startDateRef.current as unknown as { showPicker?: () => void };
+      if (picker.showPicker) {
+        picker.showPicker();
+      }
+    }
+  };
+
+  const handleEndDateClick = () => {
+    if (!disabled && endDateRef.current) {
+      endDateRef.current.focus();
+      // Use type assertion for showPicker as it's not in all TypeScript versions
+      const picker = endDateRef.current as unknown as { showPicker?: () => void };
+      if (picker.showPicker) {
+        picker.showPicker();
+      }
+    }
   };
 
   const hasValue = value?.startDate || value?.endDate;
@@ -63,9 +89,11 @@ const DateRangeFilterComponent: React.FC<DateRangeFilterProps> = ({
         <div className={styles.inputWrapper}>
           <label className={styles.inputLabel}>From</label>
           <input
+            ref={startDateRef}
             type="date"
             value={value?.startDate || ""}
             onChange={handleStartDateChange}
+            onClick={handleStartDateClick}
             disabled={disabled}
             className={styles.dateInput}
             max={value?.endDate} // Can't select start date after end date
@@ -79,9 +107,11 @@ const DateRangeFilterComponent: React.FC<DateRangeFilterProps> = ({
         <div className={styles.inputWrapper}>
           <label className={styles.inputLabel}>To</label>
           <input
+            ref={endDateRef}
             type="date"
             value={value?.endDate || ""}
             onChange={handleEndDateChange}
+            onClick={handleEndDateClick}
             disabled={disabled}
             className={styles.dateInput}
             min={value?.startDate} // Can't select end date before start date

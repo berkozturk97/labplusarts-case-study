@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import styles from "./styles.module.css";
 import { useFilterOrdersQuery } from "../../services/orders";
 import DataTable from "../../components/DataTable";
@@ -14,6 +14,43 @@ const OrdersPage: React.FC = () => {
     usePageParams();
 
   const { data: response, error, isLoading } = useFilterOrdersQuery(filters);
+
+  // Generate dynamic filter options based on canBeFilteredPropsWithDropdown
+  const dynamicFilterOptions = useMemo(() => {
+    if (!response?.data || response.data.length === 0) return {};
+
+    // Get filterable fields from the first order
+    const firstOrder = response.data[0];
+    const filterableFields = firstOrder.canBeFilteredPropsWithDropdown || [];
+
+    // Extract unique values for each filterable field
+    const filterOptions: Record<string, string[]> = {};
+
+    filterableFields.forEach(fieldName => {
+      const uniqueValues = [
+        ...new Set(
+          response.data
+            .map(order => {
+              // Safe field access
+              const orderRecord = order as unknown as Record<string, unknown>;
+              return orderRecord[fieldName];
+            })
+            .filter(value => value != null && value !== "")
+            .map(value => String(value)) // Convert to string for consistent typing
+        ),
+      ].sort();
+
+      filterOptions[fieldName] = uniqueValues;
+    });
+
+    return filterOptions;
+  }, [response?.data]);
+
+  // Get filterable fields list
+  const filterableFields = useMemo(() => {
+    if (!response?.data || response.data.length === 0) return [];
+    return response.data[0].canBeFilteredPropsWithDropdown || [];
+  }, [response?.data]);
 
   if (isLoading) {
     return (
@@ -55,11 +92,6 @@ const OrdersPage: React.FC = () => {
       }
     : undefined;
 
-  // Extract unique values for multi-select filters from all data (not just current page)
-  // Note: In real implementation, you might want to fetch these separately
-  const statusOptions = ["Pending", "Processing", "Shipped", "Delivered", "Cancelled"];
-  const customerOptions = ["John Doe", "Jane Smith", "Bob Johnson", "Alice Brown", "Charlie Wilson", "Diana Clark"];
-
   // Calculate statistics from current page data
   const totalRevenue = orders
     .filter((order: Order) => order.status !== "Cancelled")
@@ -70,6 +102,16 @@ const OrdersPage: React.FC = () => {
     return acc;
   }, {});
 
+  // Helper function to get display label for field names
+  const getFieldDisplayLabel = (fieldName: string): string => {
+    const labels: Record<string, string> = {
+      customer: "Customer",
+      status: "Order Status",
+      // Add more field mappings as needed
+    };
+    return labels[fieldName] || fieldName.charAt(0).toUpperCase() + fieldName.slice(1);
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -79,27 +121,25 @@ const OrdersPage: React.FC = () => {
 
       {/* Filters Section */}
       <div className={styles.filtersSection}>
-        <div className={styles.filtersGrid}>
+        {/* Date Filters Row */}
+        <div className={styles.dateFiltersRow}>
           <DateRangeFilterComponent label="Order Date Range" value={filters.dateRange} onChange={updateDateRange} />
-
           <ExactDateFilterComponent label="Exact Order Date" value={filters.exactDate} onChange={updateExactDate} />
+        </div>
 
-          <MultiSelectFilterComponent
-            label="Order Status"
-            options={statusOptions}
-            value={filters.multiSelect.status}
-            onChange={values => updateMultiSelect("status", values)}
-            placeholder="Search status..."
-          />
-
-          <MultiSelectFilterComponent
-            label="Customer"
-            options={customerOptions}
-            value={filters.multiSelect.customer}
-            onChange={values => updateMultiSelect("customer", values)}
-            placeholder="Search customers..."
-            maxHeight="300px"
-          />
+        {/* Dropdown Filters Column */}
+        <div className={styles.dropdownFiltersColumn}>
+          {filterableFields.map(fieldName => (
+            <MultiSelectFilterComponent
+              key={fieldName}
+              label={getFieldDisplayLabel(fieldName)}
+              options={dynamicFilterOptions[fieldName] || []}
+              value={filters.multiSelect[fieldName]}
+              onChange={values => updateMultiSelect(fieldName, values)}
+              placeholder={`Search ${getFieldDisplayLabel(fieldName).toLowerCase()}...`}
+              maxHeight="300px"
+            />
+          ))}
         </div>
 
         <div className={styles.filtersActions}>
@@ -113,6 +153,14 @@ const OrdersPage: React.FC = () => {
       <div className={styles.debugInfo}>
         <details>
           <summary>Debug: Current Filters, Pagination & Sorting</summary>
+          <div>
+            <h4>Dynamic Filter Options:</h4>
+            <pre>{JSON.stringify(dynamicFilterOptions, null, 2)}</pre>
+          </div>
+          <div>
+            <h4>Filterable Fields:</h4>
+            <pre>{JSON.stringify(filterableFields, null, 2)}</pre>
+          </div>
           <div>
             <h4>Filters:</h4>
             <pre>{JSON.stringify(filters, null, 2)}</pre>

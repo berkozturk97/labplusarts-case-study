@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import styles from "./styles.module.css";
 import type { ExactDateFilter } from "../../hooks/usePageParams";
 
@@ -23,6 +23,8 @@ const ExactDateFilterComponent: React.FC<ExactDateFilterProps> = ({
   min,
   max,
 }) => {
+  const dateInputRef = useRef<HTMLInputElement>(null);
+
   const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const date = event.target.value || undefined;
     onChange({ date });
@@ -31,6 +33,18 @@ const ExactDateFilterComponent: React.FC<ExactDateFilterProps> = ({
   const handleClear = () => {
     onChange({ date: undefined });
     onClear?.();
+  };
+
+  // Handler to focus and show calendar when clicking anywhere on input
+  const handleDateClick = () => {
+    if (!disabled && dateInputRef.current) {
+      dateInputRef.current.focus();
+      // Use type assertion for showPicker as it's not in all TypeScript versions
+      const picker = dateInputRef.current as unknown as { showPicker?: () => void };
+      if (picker.showPicker) {
+        picker.showPicker();
+      }
+    }
   };
 
   const hasValue = Boolean(value?.date);
@@ -53,9 +67,11 @@ const ExactDateFilterComponent: React.FC<ExactDateFilterProps> = ({
       </div>
 
       <input
+        ref={dateInputRef}
         type="date"
         value={value?.date || ""}
         onChange={handleDateChange}
+        onClick={handleDateClick}
         disabled={disabled}
         className={styles.dateInput}
         min={min}

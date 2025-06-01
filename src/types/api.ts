@@ -16,6 +16,7 @@ export interface Order {
   status: "Pending" | "Processing" | "Shipped" | "Delivered" | "Cancelled";
   orderDate: string;
   total: number;
+  canBeFilteredPropsWithDropdown?: string[]; // Fields that can be filtered with dropdown
 }
 
 // API Response interfaces

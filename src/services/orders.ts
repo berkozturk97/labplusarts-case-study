@@ -207,7 +207,12 @@ export const ordersApi = api.injectEndpoints({
         });
 
         // Extract column names from the first object if data exists
-        const tableColumnNames = paginationResult.data.length > 0 ? Object.keys(paginationResult.data[0]) : [];
+        // Exclude internal fields that shouldn't be displayed in table
+        const excludedFields = ["canBeFilteredPropsWithDropdown"];
+        const tableColumnNames =
+          paginationResult.data.length > 0
+            ? Object.keys(paginationResult.data[0]).filter(key => !excludedFields.includes(key))
+            : [];
 
         return {
           data: paginationResult.data,
