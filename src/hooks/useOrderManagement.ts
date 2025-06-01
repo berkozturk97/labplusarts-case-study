@@ -1,78 +1,54 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { useCreateOrderMutation } from "../services/orders";
-import type { OrderFormData } from "../components/OrderForm";
 import type { Order } from "../types/api";
+import type { OrderFormData } from "../components/OrderForm";
 
-export interface UseOrderManagementResult {
-  createOrder: (orderData: OrderFormData) => Promise<void>;
-  isCreating: boolean;
-  error: string | null;
-}
-
+// Helper function to generate order number
 const generateOrderNumber = (): string => {
-  const timestamp = Date.now();
-  const suffix = timestamp.toString().slice(-6);
-  return `ORD-${suffix}`;
+  const timestamp = Date.now().toString().slice(-6); // Last 6 digits of timestamp
+  const random = Math.floor(Math.random() * 1000)
+    .toString()
+    .padStart(3, "0");
+  return `ORD-${timestamp}${random}`;
 };
 
-export const useOrderManagement = (): UseOrderManagementResult => {
-  const [createOrderMutation, { isLoading: isCreating }] = useCreateOrderMutation();
-  const [error, setError] = useState<string | null>(null);
+export const useOrderManagement = () => {
+  const [createOrderMutation] = useCreateOrderMutation();
+  const [isCreating, setIsCreating] = useState(false);
 
-  const createOrder = async (orderData: OrderFormData): Promise<void> => {
+  const createOrder = async (orderData: OrderFormData): Promise<Order> => {
+    setIsCreating(true);
+
     try {
-      setError(null);
-
-      const newOrder: Omit<Order, "id"> = {
+      // Auto-generate fields that the user shouldn't provide
+      const orderToCreate = {
         ...orderData,
         orderNumber: generateOrderNumber(),
-        orderDate: new Date().toISOString().split("T")[0],
-        canBeFilteredPropsWithDropdown: ["customer", "status"],
+        orderDate: new Date().toISOString().split("T")[0], // YYYY-MM-DD format
+        canBeFilteredPropsWithDropdown: ["status"], // Auto-generated array
       };
 
-      await createOrderMutation(newOrder).unwrap();
+      const result = await createOrderMutation(orderToCreate).unwrap();
 
-      toast.success(`Order "${newOrder.orderNumber}" for ${orderData.customer} has been created successfully!`, {
+      // Show success toast
+      toast.success(`Order "${result.orderNumber}" created successfully!`, {
         position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
-    } catch (err: unknown) {
-      let errorMessage = "Failed to create order. Please try again.";
-
-      if (err && typeof err === "object") {
-        if ("data" in err && err.data && typeof err.data === "object") {
-          const errorData = err.data as { message?: string; error?: string };
-          errorMessage = errorData.message || errorData.error || errorMessage;
-        } else if ("message" in err && typeof err.message === "string") {
-          errorMessage = err.message;
-        }
-      } else if (typeof err === "string") {
-        errorMessage = err;
-      }
-
-      setError(errorMessage);
-
-      toast.error(errorMessage, {
-        position: "top-right",
-        autoClose: 6000,
+        autoClose: 3000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
       });
 
-      throw err;
+      return result;
+    } finally {
+      setIsCreating(false);
     }
   };
 
   return {
     createOrder,
     isCreating,
-    error,
   };
 };

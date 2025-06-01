@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { api } from "../services/api";
+import { errorToastMiddleware } from "../middleware/errorToastMiddleware";
 
 export const store = configureStore({
   reducer: {
@@ -14,7 +15,9 @@ export const store = configureStore({
       serializableCheck: {
         ignoredActions: ["persist/PERSIST", "persist/REHYDRATE"],
       },
-    }).concat(api.middleware),
+    })
+      .concat(api.middleware)
+      .concat(errorToastMiddleware),
 });
 
 // optional, but required for refetchOnFocus/refetchOnReconnect behaviors

@@ -217,6 +217,15 @@
       "orderNumber": "ORD-814474",
       "orderDate": "2025-06-01",
       "canBeFilteredPropsWithDropdown": ["customer", "status"]
+    },
+    {
+      "id": "0e5a",
+      "customer": "tester",
+      "status": "Processing",
+      "total": 20000,
+      "orderNumber": "ORD-655118762",
+      "orderDate": "2025-06-01",
+      "canBeFilteredPropsWithDropdown": ["status"]
     }
   ]
 }
