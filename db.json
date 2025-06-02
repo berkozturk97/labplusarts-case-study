@@ -107,6 +107,15 @@
       "createdAt": "2025-02-14",
       "isActive": true,
       "canBeFilteredPropsWithDropdown": ["role", "isActive"]
+    },
+    {
+      "id": "82f0",
+      "name": "Halim Ozturk",
+      "email": "berk1ozturk1@gmail.com",
+      "role": "Admin",
+      "isActive": true,
+      "createdAt": "2025-06-02",
+      "canBeFilteredPropsWithDropdown": ["role", "isActive"]
     }
   ],
   "orders": [
@@ -224,6 +233,15 @@
       "status": "Processing",
       "total": 20000,
       "orderNumber": "ORD-655118762",
+      "orderDate": "2025-06-01",
+      "canBeFilteredPropsWithDropdown": ["status"]
+    },
+    {
+      "id": "18be",
+      "customer": "Alan Rickman",
+      "status": "Processing",
+      "total": 3000,
+      "orderNumber": "ORD-276767346",
       "orderDate": "2025-06-01",
       "canBeFilteredPropsWithDropdown": ["status"]
     }

@@ -245,7 +245,7 @@ const UsersPage: React.FC = () => {
           sortOrder: filters.sortOrder,
         }}
         showSearch={true}
-        clientSideSearch={false}
+        clientSideSearch={true}
       />
 
       <div className={styles.footer}>
